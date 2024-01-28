@@ -1,0 +1,95 @@
+
+<!DOCTYPE>
+<html>
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+
+<title>Hello Github</title>
+
+<style type="text/css">
+html,body {
+    height:100%;
+    margin:0;
+    overflow:hidden;
+    background-color:#ccc;
+ }
+#randomBox1,#randomBox2,#randomBox3,
+#randomBox4,#randomBox5,#randomBox6 {
+    width:450px;
+    height:198px;
+    border:1px solid #000;
+    background-color:#f00;
+    border-radius:15px;
+    box-shadow:#000 10px 10px 30px;
+    margin:20px;
+    text-align:center;
+    font-size:80px;
+ }
+
+.pstn {
+    position:absolute;
+ }
+.non-mover{
+    position:relative;
+ }
+</style>
+
+<script type="text/javascript">
+var speed=1000;
+   var l=[];
+   var t=[];
+   var obj,w,h,c;  
+   var objs=document.getElementsByTagName('div');
+   var bit=30;
+function init(){
+   obj=document.getElementsByTagName('html')[0]; 
+   w=obj.offsetWidth;
+   h=obj.offsetHeight;
+for(c=0;c<objs.length;c++){
+if(objs[c].className=='non-mover'){
+   objs[c].style.zIndex=Math.floor(Math.random()*w)/2;}
+if(objs[c].className!='non-mover'){
+   l[c]=Math.floor(Math.random()*w);
+   t[c]=Math.floor(Math.random()*h);
+   objs[c].style.zIndex=Math.floor(Math.random()*w);
+if(l[c]>=w-objs[c].offsetWidth){
+   l[c]=w-objs[c].offsetWidth-bit;
+ }
+if(l[c]<=0){
+   l[c]=0+bit;
+ }
+if(t[c]>=h-objs[c].offsetHeight){
+   t[c]=h-objs[c].offsetHeight-bit;
+ }
+if(t[c]<=0){
+   t[c]=0+bit;
+ }
+   objs[c].style.left=l[c]+'px';
+   objs[c].style.top=t[c]+'px';
+   objs[c].className='pstn';
+   }
+  }
+setTimeout(function(){init()},speed); 
+ }
+
+ window.addEventListener?
+ window.addEventListener('load',init,false):
+ window.attachEvent('onload',init);
+
+</script>
+
+</head>
+<body>
+
+<div id="randomBox1">Guten Morgen</div>
+<div id="randomBox2">Buongiorno</div>
+<div id="randomBox3">Hello </div>
+<div id="randomBox4">Hola</div>
+<div id="randomBox4" class="non-mover">Bonjour</div>
+
+
+</body>
+</html>
