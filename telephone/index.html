@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cache-Cache-Clic</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        position: relative; /* Position relative pour centrer l'énigme */
+        height: 100vh; /* Hauteur de la fenêtre */
+    }
+    #enigme {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 24px;
+        font-weight: bold;
+    }
+    .cache-cache {
+        position: absolute; /* Position aléatoire sur la page */
+        color: rgba(0, 0, 0, 0.1); /* Couleur grise semi-transparente */
+        pointer-events: none; /* Permet aux clics de passer à travers */
+    }
+    #infoBox {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+</style>
+</head>
+<body>
+
+<div id="enigme">Cache-Cache-Clic</div>
+
+<img src="information.png" alt="Information" id="infoButton" style="position: absolute; top: 10px; left: 10px; width: 30px; cursor: pointer;">
+
+<div id="infoBox">
+    <p>Cache-Cache-Clic... est une exposition sur et autour d'Internet qui se découvre au grès de vos recherches dans l'ESAD. A la place d'un plan d'exposition nous avons choisi une interface web pour vous mettre sur la piste.</p>
+    <p>Avec : Hind Abbaze, Anne-Sophie Fofana, Jolaine Kanda, Macha Frantskevich, Bastien Record, Emilie Retailleau, Lita Shin, Eda Tinmaz, Berk Ata Türkyılmaz, Rita Lenore Viitkar, Valérie Yong.</p>
+</div>
+
+<script>
+    let enigmePrecedente = '';
+    let isFirstClick = false; // Pour détecter le premier clic ou touché
+
+    const delaiClic = 1000; // Délai en millisecondes
+    const touchDelay = 500; // Délai en millisecondes avant d'afficher l'énigme après un toucher
+
+    const enigmes = [
+        "Rendez-vous au rez de chaussé ! Devant les affiches (salle 6, 7) découvrez moi avec votre lecteur NFC de votre téléphone",
+        "Vous n'êtes pas loin",
+        "Rendez-vous au rez de chaussé, sur le mur du couloir de la salle 8, découvrez moi avec votre lecteur NFC de votre téléphone",
+        "Vous chauffez !",
+        "Rendez-vous au rez de chaussé devant le mirroir des toilettes",
+        "Encore un petit effort",
+        "Rendez-vous dans l'atelier vidéo, vous y trouverez une affiche accrochée au mur, décodez à l'aide de votre lecteur NFC ",
+        "Rendez-vous au 2ème étage, dans la salle 211",
+        "Rendez-vous devant un poster A2 sur le mur près de COOP",
+        "Encore cherchez encore !"
+        // Ajoutez plus d'énigmes ici
+    ];
+
+    function getRandomEnigme() {
+        let nouvelleEnigme = enigmes[Math.floor(Math.random() * enigmes.length)];
+        // Vérifier si la nouvelle énigme est la même que la précédente
+        while (nouvelleEnigme === enigmePrecedente) {
+            nouvelleEnigme = enigmes[Math.floor(Math.random() * enigmes.length)];
+        }
+        enigmePrecedente = nouvelleEnigme;
+        return nouvelleEnigme;
+    }
+
+    // Fonction pour obtenir une position aléatoire à l'intérieur de la zone visible de l'écran
+    function getPositionInsideViewport() {
+        const posX = Math.random() * (window.innerWidth - 100); // Ajustez la plage pour rester à l'intérieur de l'écran
+        const posY = Math.random() * (window.innerHeight - 100); // Ajustez la plage pour rester à l'intérieur de l'écran
+        return { x: posX, y: posY };
+    }
+
+    function afficherEnigme() {
+        if (!isFirstClick) {
+            const enigmeElement = document.getElementById('enigme');
+            enigmeElement.innerText = "Suivez les instructions et découvrez les projets qui se cachent dans l'école"; // Message d'invitation au début
+            isFirstClick = true;
+            return;
+        }
+        const enigmeElement = document.getElementById('enigme');
+        enigmeElement.innerText = ''; // Effacer le message d'invitation
+        const enigme = getRandomEnigme();
+        enigmeElement.innerText = enigme;
+        lireEnigme(enigme);
+
+        // Ajouter les mots "cache-cache" du fond jusqu'au prochain clic ou touché de l'écran
+        const intervalId = setInterval(() => {
+            const cacheCacheText = document.createTextNode('cache-cache');
+            const cacheCacheNode = document.createElement('div');
+            cacheCacheNode.appendChild(cacheCacheText);
+            cacheCacheNode.classList.add('cache-cache'); // Ajouter une classe pour le style CSS
+            document.body.appendChild(cacheCacheNode);
+            const { x, y } = getPositionInsideViewport(); // Obtenir une position aléatoire à l'intérieur de la zone visible
+            cacheCacheNode.style.left = x + 'px';
+            cacheCacheNode.style.top = y + 'px';
+        }, 1000);
+
+        // Arrêter d'ajouter les mots "cache-cache" lorsque le prochain clic est détecté
+        document.addEventListener('click', () => {
+            clearInterval(intervalId);
+            // Supprimer tous les éléments avec la classe 'cache-cache'
+            const cacheCacheElements = document.querySelectorAll('.cache-cache');
+            cacheCacheElements.forEach(element => {
+                document.body.removeChild(element);
+            });
+        });
+    }
+
+    function lireEnigme(enigme) {
+        const speech = new SpeechSynthesisUtterance();
+        speech.lang = 'fr-FR';
+        speech.text = enigme;
+        window.speechSynthesis.speak(speech);
+    }
+
+    // Afficher ou masquer les informations supplémentaires
+    document.getElementById('infoButton').addEventListener('click', function() {
+        const infoBox = document.getElementById('infoBox');
+        if (infoBox.style.display === 'none' || infoBox.style.display === '') {
+            infoBox.style.display = 'block';
+            // Ajouter un écouteur d'événements pour détecter les clics sur la fenêtre et masquer les informations lorsque vous cliquez en dehors de la boîte d'informations
+            window.addEventListener('click', detecterClicExterieur);
+        } else {
+            infoBox.style.display = 'none';
+        }
+    });
+
+    // Fonction pour détecter les clics à l'extérieur de la boîte d'informations
+    function detecterClicExterieur(event) {
+        const infoBox = document.getElementById('infoBox');
+        if (!infoBox.contains(event.target) && event.target !== document.getElementById('infoButton')) {
+            infoBox.style.display = 'none';
+            window.removeEventListener('click', detecterClicExterieur);
+        }
+    }
+
+    let lastTouchTime = 0;
+
+    // Lancer le jeu lorsque l'utilisateur clique ou touche l'écran
+    document.addEventListener('click', () => {
+        afficherEnigme();
+    });
+    document.addEventListener('touchstart', (event) => {
+        const currentTime = new Date().getTime();
+        const timeSinceLastTouch = currentTime - lastTouchTime;
+        if (timeSinceLastTouch > touchDelay) {
+            afficherEnigme();
+        }
+        lastTouchTime = currentTime;
+    });
+
+</script>
+
+</body>
+</html>
