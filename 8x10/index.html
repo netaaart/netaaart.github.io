@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8 x 10</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+        }
+        .cartel {
+            width: 350px;
+            height: 300px;
+            background-color: white;
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 27px;
+            font-weight: lighter;
+            cursor: pointer;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="cartel" onclick="openArtwork()">8 x 10</div>
+    <script>
+        const artworks = [
+            "https://example.com/artwork1",
+            "https://example.com/artwork2",
+            "https://example.com/artwork3"
+        ];
+
+        function openArtwork() {
+            const randomIndex = Math.floor(Math.random() * artworks.length);
+            window.open(artworks[randomIndex], "_blank");
+        }
+    </script>
+</body>
+</html>
