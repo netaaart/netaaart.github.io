@@ -22,25 +22,60 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 27px;
+            font-size: 24px;
             font-weight: lighter;
             cursor: pointer;
             text-align: center;
+            position: relative;
+        }
+        .details {
+            display: none;
+            font-size: 14px;
+            font-weight: lighter;
+            text-align: center;
+            position: absolute;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+        }
+        .title {
+            z-index: 1;
         }
     </style>
 </head>
 <body>
-    <div class="cartel" onclick="openArtwork()">8 x 10</div>
+    <div class="cartel" onclick="showDetails()">
+        <div class="details" id="details"></div>
+        <div class="title">8 x 10</div>
+    </div>
     <script>
         const artworks = [
-            "https://example.com/artwork1",
-            "https://example.com/artwork2",
-            "https://example.com/artwork3"
+            { name: "Mosa Breton", title: "HELP US", year: "2025", url: "https://mosasaureart.github.io/help_us/" },
+            { name: "Seoyul Lee", title: "Hack", year: "2025", url: "https://zigu-m.github.io/hack/" },
+            { name: "Alice Massart", title: "Popups", year: "2025", url: "https://a-massart.github.io/amassart.github.io/Hack/" },
+            { name: "Adèle Bouvard", title: "Panier", year: "2025", url: "https://adailenet.github.io/web-extension/" },
+            { name: "Alice Proust", title: "Erreur", year: "2025", url: "https://funderyee.github.io/hack/index.html " },
+            { name: "Naya Jean", title: "Vous verrez", year: "2025", url: "https://nayaeljuan.github.io/brainhack/Hacking-du-brain/" },
+            { name: "Julie Halimi", title: "Puzzle", year: "2025", url: "https://jujunetart.github.io/puzzle/index.html" },
+            { name: "Katarzyna Stępień", title: "Snake", year: "2025", url: "https://kstepien509.github.io/snake" },
+            { name: "Lisa Carcagne", title: "???", year: "2025", url: "???" },
+            { name: "Kim Suyeon", title: "???", year: "2025", url: "???" },
+            { name: "Alyssia Makhloufi", title: "???", year: "2025", url: "???" }
         ];
 
-        function openArtwork() {
+        function showDetails() {
             const randomIndex = Math.floor(Math.random() * artworks.length);
-            window.open(artworks[randomIndex], "_blank");
+            const selectedArtwork = artworks[randomIndex];
+            
+            const detailsElement = document.getElementById("details");
+            detailsElement.innerHTML = `${selectedArtwork.name}, ${selectedArtwork.title}, ${selectedArtwork.year}`;
+            detailsElement.style.display = "block";
+            
+            setTimeout(() => {
+                window.open(selectedArtwork.url, "_blank");
+                detailsElement.style.display = "none";
+            }, 3000);
         }
     </script>
 </body>
